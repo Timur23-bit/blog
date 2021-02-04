@@ -1,0 +1,33 @@
+.list {
+    background-color: #EBEEF3!important;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.ant-pagination-item-link {
+    background: none!important;
+    border: none!important;
+    border-radius: 4px!important;
+}
+.ant-pagination-item {
+    background: none!important;
+    color: black!important;
+    border: none!important;
+    border-radius: 4px!important;
+}
+
+.ant-pagination-item:hover a,
+.ant-pagination-item-link:hover,
+.ant-pagination-item-container:hover{
+    background: #1890FF!important;
+    color: white!important;
+    border: none!important;
+    border-radius: 4px!important;
+}
+
+.ant-select-selector, .ant-pagination-options {
+    display: none!important;
+}

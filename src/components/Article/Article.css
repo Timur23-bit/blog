@@ -1,0 +1,25 @@
+.article__tag {
+    color: rgba(0, 0, 0, 0.5)!important;
+    border-color: rgba(0, 0, 0, 0.5)!important;
+    margin-bottom: 16px;
+}
+
+.article__description {
+    color: rgba(0, 0, 0, 0.5)!important;
+    margin-bottom: 25px;
+}
+
+.article__body pre {
+    width: 100%;
+    white-space: pre-wrap;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.article__listItem {
+    height: auto!important;
+    background-color: white;
+}

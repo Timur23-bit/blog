@@ -1,0 +1,41 @@
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-family: Inter,sans-serif;
+    align-items: center;
+    background-color: white;
+    padding: 10px 0px;
+    margin-bottom: 24px;
+}
+
+.title {
+    margin-left: 22px;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+.header__author {
+    margin-right: 22px;
+}
+
+.btn {
+    background-color: white;
+    padding: 10px 18px;
+    font-size: 18px;
+    line-height: 28px;
+    border-radius: 5px;
+    border: 1px solid #52C41A;
+}
+
+.header__signIn {
+    border: none;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.header__signUp {
+    color: #52C41A;
+    cursor: pointer;
+}
