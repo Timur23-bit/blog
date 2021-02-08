@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "airbnb-base",
+    "react-app",
+    "prettier"
+  ],
+  "rules": {
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "jsx-quotes": [
+      1,
+      "prefer-double"
+    ],
+    "no-console": "error",
+    "no-useless-escape": "off"
+  },
+  "plugins": [
+    "prettier"
+  ]
+}
