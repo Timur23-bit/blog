@@ -15,9 +15,9 @@ function Header ({updateUser, user, history}) {
 
 	function imgCorrection(image) {
 		if (image) {
-			return <img className={'avatar'} src={img} alt={'Avatar'}/>
+			return <Link to={'/profile'}><img className={'avatar'} src={img} alt={'Avatar'}/></Link>
 		}
-		return <div className={'no-avatar'}>No avatar</div>
+		return <Link to={'/profile'}><div className={'no-avatar'}>No avatar</div></Link>
 	}
 
 	if (username) {
