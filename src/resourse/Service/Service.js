@@ -14,28 +14,28 @@ class GetInformations {
 			case 401:
 				return <Alert
 					message="Error"
-					description='401 Access denied'
+					description="401 Access denied"
 					type="error"
 					showIcon
 				/>;
 			case 403:
 				return <Alert
 				 message="Error"
-				 description='403 no permission required'
+				 description="403 no permission required"
 				 type="error"
 				 showIcon
 				/>;
 			case 404:
 				return <Alert
 					message="Error"
-					description='404 not found'
+					description="404 not found"
 					type="error"
 					showIcon
     		/>;
 			case 'Failed to fetch':
 				return <Alert
 					message="Error"
-					description='Not internet connection'
+					description="Not internet connection"
 					type="error"
 					showIcon
     		/>;
@@ -62,11 +62,29 @@ class GetInformations {
 				error = { message: this.errorMessage(res.status) };
 			}
 		}
-		return error ? error : body;
+		return error || body;
 	}
 
-	async getProfile(username) {
-		const res = await this.getResource(`profiles/${username}`);
+	async setRegistration (data) {
+		const res = await fetch(`${this.apiBase}users`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify(data)
+		});
+		const body = res.json();
+		return body;
+	}
+
+	async setAuthentication (data) {
+		const res = await fetch(`${this.apiBase}users/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify(data)
+		});
 		const body = res.json();
 		return body;
 	}
@@ -74,7 +92,7 @@ class GetInformations {
 	async getArticle(slug) {
 		let error = false;
 		let body = 0;
-		const res = await this.getResource(`artiles/${slug}`).catch(err => {
+		const res = await this.getResource(`articles/${slug}`).catch(err => {
 			error = { message: this.errorMessage(err.message) };
 		});
 		if (!error) {
@@ -83,9 +101,30 @@ class GetInformations {
 				error = { message: this.errorMessage(res.status) };
 			}
 		}
-		return error ? error : body;
+		return error || body;
 	}
 
+	async getProfile(username) {
+		let error = false;
+		const res = await this.getResource(`profiles/${username}`);
+		if (res.status !== 200) {
+			error = true
+		}
+		return error;
+	}
+
+	async setProfile(data, token) {
+		const res = await fetch(`${this.apiBase}user`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				'Authorization': `Token ${token}`
+			},
+			body: JSON.stringify(data)
+		});
+		const body = res.json();
+		return body;
+	}
 }
 
 const informs = new GetInformations();

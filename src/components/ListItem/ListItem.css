@@ -37,7 +37,7 @@
 
 .listItem__title {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     margin-bottom: 4px;
 }
 
@@ -77,10 +77,20 @@
     right: 15px;
 }
 
-.profile img {
+.avatar {
     width: 46px;
     height: 46px;
     border-radius: 50%;
+}
+
+.no-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: #8C8C8C;
+    color: white;
+    text-align: center;
+    font-size: 12px;
 }
 
 .profile__name {

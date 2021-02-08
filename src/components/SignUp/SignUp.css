@@ -47,7 +47,7 @@
     display: none;
 }
 
-.errorActive {
+.inputError {
     border: 1px solid #F5222D!important;
 }
 
@@ -66,7 +66,7 @@
     margin-bottom: 12px;
 }
 
-.passConfErrorLength {
+.error {
     color: #F5222D;
     font-family: Roboto, sans-serif;
     font-style: normal;
@@ -75,6 +75,11 @@
     line-height: 22px;
     margin-top: -12px;
     margin-bottom: 12px;
+}
+
+.error::before {
+    display: inline;
+    content: "⚠ ";
 }
 
 .fake {
@@ -100,7 +105,7 @@
 
 .label-checkbox {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     font-family: Roboto, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -124,6 +129,22 @@
     font-size: 16px;
     line-height: 24px;
     cursor: pointer;
+    margin-top: 21px;
+}
+
+.submit input[disabled] {
+    width: 100%;
+    border:1px solid rgba(0, 0, 0, 0.5)!important;
+    padding: 8px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5)!important;
+    border-radius: 4px;
+    font-family: Roboto,sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: auto!important;
     margin-top: 21px;
 }
 

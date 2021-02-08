@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import ReactMarkdown from "react-markdown";
+import {format} from "date-fns";
+import Spint from "../Spin/Spin";
+import informs from "../../resourse/Service/Service";
+
 import like from "../../resourse/Vector.svg";
 import photo from "../../resourse/Rectangle 1.png";
 import './Article.css';
-import ReactMarkdown from "react-markdown";
-import informs from "../../resourse/Service/Service";
-import {format} from "date-fns";
-import Spint from "../Spin/Spin";
 
 export default function Article ({slug}) {
 	const [article, setArticle] = useState(0);
@@ -45,13 +46,11 @@ export default function Article ({slug}) {
 						<img src={photo} alt={'Avatar'}/>
 					</div>
 				</div>
-				{article.tagList.map((tag) => {
-					return (
+				{article.tagList.map((tag) => (
 						<div className={'listItem__tag'} key={tag}>
 							{tag}
 						</div>
-					)
-				})}
+					))}
 				<div className={'listItem__description article__description'}>
 					{article.description}
 				</div>

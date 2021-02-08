@@ -36,10 +36,8 @@ export default function List() {
 	}, []);
 
 	if (!error) {
-		render = listArticles.length === 0 && loading ? <Spint/> : <div className='list'>
-			{listArticles.map((item, i) => {
-				return <ListItem item={item} key={i}/>
-			})}
+		render = listArticles.length === 0 && loading ? <Spint/> : <div className="list">
+			{listArticles.map((item, i) => <ListItem item={item} key={i}/>)}
 			<div className={'pagination'}>
 				<Pagination defaultCurrent={1} total={500} pageSize={5} onChange={(currentPage, pageSize) => {
 					getCurrentArticleList(currentPage, pageSize);
