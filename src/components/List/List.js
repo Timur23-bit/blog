@@ -46,8 +46,6 @@ export default function List() {
 		</div>;
 	}
 
-
-
 	const err = error ? <div>{error.message}</div> : render;
 	return err;
 }

@@ -1,130 +1,177 @@
 import { Alert } from 'antd';
 
 class GetInformations {
-	apiBase = 'https://conduit.productionready.io/api/';
+  apiBase = 'https://conduit.productionready.io/api/';
 
-	async getResource(rest) {
-		// eslint-disable-next-line no-underscore-dangle
-		const res = await fetch(`${this.apiBase}${rest}`);
-		return res;
-	}
+  async getResource(rest) {
+    // eslint-disable-next-line no-underscore-dangle
+    const res = await fetch(`${this.apiBase}${rest}`);
+    return res;
+  }
 
-	errorMessage = (status) => {
-		switch (status) {
-			case 401:
-				return <Alert
-					message="Error"
-					description="401 Access denied"
-					type="error"
-					showIcon
-				/>;
-			case 403:
-				return <Alert
-				 message="Error"
-				 description="403 no permission required"
-				 type="error"
-				 showIcon
-				/>;
-			case 404:
-				return <Alert
-					message="Error"
-					description="404 not found"
-					type="error"
-					showIcon
-    		/>;
-			case 'Failed to fetch':
-				return <Alert
-					message="Error"
-					description="Not internet connection"
-					type="error"
-					showIcon
-    		/>;
-			default:
-				return <Alert
-					message="Error"
-					description={`${status} Unknown error`}
-					type="error"
-					showIcon
-				/>
-		}
-	};
+  errorMessage = (status) => {
+    switch (status) {
+      case 401:
+        return (
+          <Alert
+            message="Error"
+            description="401 Access denied"
+            type="error"
+            showIcon
+          />
+        );
+      case 403:
+        return (
+          <Alert
+            message="Error"
+            description="403 no permission required"
+            type="error"
+            showIcon
+          />
+        );
+      case 404:
+        return (
+          <Alert
+            message="Error"
+            description="404 not found"
+            type="error"
+            showIcon
+          />
+        );
+      case 'Failed to fetch':
+        return (
+          <Alert
+            message="Error"
+            description="Not internet connection"
+            type="error"
+            showIcon
+          />
+        );
+      default:
+        return (
+          <Alert
+            message="Error"
+            description={`${status} Unknown error`}
+            type="error"
+            showIcon
+          />
+        );
+    }
+  };
 
+  async getArticles(pageSize, offset) {
+    let error = false;
+    let body = 0;
+    const res = await this.getResource(
+      `articles?limit=${pageSize}&offset=${offset}`
+    ).catch((err) => {
+      error = { message: this.errorMessage(err.message) };
+    });
+    if (!error) {
+      body = res.json();
+      if (!res.ok) {
+        error = { message: this.errorMessage(res.status) };
+      }
+    }
+    return error || body;
+  }
 
-	async getArticles(pageSize, offset) {
-		let error = false;
-		let body = 0;
-		const res = await this.getResource(`articles?limit=${pageSize}&offset=${offset}`).catch(err => {
-			error = { message: this.errorMessage(err.message) };
-		});
-		if (!error) {
-			body = res.json();
-			if (!res.ok) {
-				error = { message: this.errorMessage(res.status) };
-			}
-		}
-		return error || body;
-	}
+  async setRegistration(data) {
+    const res = await fetch(`${this.apiBase}users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(data),
+    });
+    const body = res.json();
+    return body;
+  }
 
-	async setRegistration (data) {
-		const res = await fetch(`${this.apiBase}users`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8'
-			},
-			body: JSON.stringify(data)
-		});
-		const body = res.json();
-		return body;
-	}
+  async setAuthentication(data) {
+    const res = await fetch(`${this.apiBase}users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(data),
+    });
+    const body = res.json();
+    return body;
+  }
 
-	async setAuthentication (data) {
-		const res = await fetch(`${this.apiBase}users/login`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8'
-			},
-			body: JSON.stringify(data)
-		});
-		const body = res.json();
-		return body;
-	}
+  async getArticle(slug) {
+    let error = false;
+    let body = 0;
+    const res = await this.getResource(`articles/${slug}`).catch((err) => {
+      error = { message: this.errorMessage(err.message) };
+    });
+    if (!error) {
+      body = res.json();
+      if (!res.ok) {
+        error = { message: this.errorMessage(res.status) };
+      }
+    }
+    return error || body;
+  }
 
-	async getArticle(slug) {
-		let error = false;
-		let body = 0;
-		const res = await this.getResource(`articles/${slug}`).catch(err => {
-			error = { message: this.errorMessage(err.message) };
-		});
-		if (!error) {
-			body = res.json();
-			if (!res.ok) {
-				error = { message: this.errorMessage(res.status) };
-			}
-		}
-		return error || body;
-	}
+  async getProfile(username) {
+    let error = false;
+    const res = await this.getResource(`profiles/${username}`);
+    if (res.status !== 200) {
+      error = true;
+    }
+    return error;
+  }
 
-	async getProfile(username) {
-		let error = false;
-		const res = await this.getResource(`profiles/${username}`);
-		if (res.status !== 200) {
-			error = true
-		}
-		return error;
-	}
+  async setProfile(data, token) {
+    const res = await fetch(`${this.apiBase}user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const body = res.json();
+    return body;
+  }
 
-	async setProfile(data, token) {
-		const res = await fetch(`${this.apiBase}user`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
-				'Authorization': `Token ${token}`
-			},
-			body: JSON.stringify(data)
-		});
-		const body = res.json();
-		return body;
-	}
+  async setArticle(data, token) {
+    const res = await fetch(`${this.apiBase}articles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const body = res.json();
+    return body;
+  }
+
+  async deleteArticle(slug, token) {
+    await fetch(`${this.apiBase}articles/${slug}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+    });
+  }
+
+  async updateArticle(data, token, slug) {
+    const res = await fetch(`${this.apiBase}articles/${slug}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const body = res.json();
+    return body;
+  }
 }
 
 const informs = new GetInformations();
