@@ -6,13 +6,13 @@ import './List.css';
 import informs from "../../resourse/Service/Service";
 import Spint from "../Spin/Spin";
 
-export default function List() {
+export default function List({user}) {
 	const [ listArticles, setListArticles ] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	let render;
 	const getCurrentArticleList = (currentPage, pageSize) => {
-		informs.getArticles(pageSize, (currentPage-1)*pageSize).then(ext => {
+		informs.getArticles(pageSize, (currentPage-1)*pageSize, user.token).then(ext => {
 			if (ext.message !== undefined) {
 				setError(ext.message);
 				setLoading(false);
@@ -24,7 +24,7 @@ export default function List() {
 	};
 
 	useEffect(()=>{
-		informs.getArticles(5, 0).then(ext => {
+		informs.getArticles(5, 0, user.token).then(ext => {
 			if (ext.message !== undefined) {
 				setError(ext);
 				setLoading(false);
@@ -37,7 +37,7 @@ export default function List() {
 
 	if (!error) {
 		render = listArticles.length === 0 && loading ? <Spint/> : <div className="list">
-			{listArticles.map((item, i) => <ListItem item={item} key={i}/>)}
+			{listArticles.map((item, i) => <ListItem item={item} user={user} key={i}/>)}
 			<div className={'pagination'}>
 				<Pagination defaultCurrent={1} total={500} pageSize={5} onChange={(currentPage, pageSize) => {
 					getCurrentArticleList(currentPage, pageSize);

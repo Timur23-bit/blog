@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import like from '../../resourse/Vector.svg';
+import likeFalse from '../../resourse/Vector.svg';
+import likeTrue from '../../resourse/path4qwe.svg';
 import './ListItem.css';
+import informs from '../../resourse/Service/Service';
 
-export default function ListItem({ item }) {
-  const { favoritesCount, tagList, title, description, slug } = item;
-
+export default function ListItem({ item, user }) {
+  const { favorited, favoritesCount, tagList, title, description, slug } = item;
+  const [favorit, setFavorit] = useState(favorited);
+  const [favoritCount, setFavoritCount] = useState(favoritesCount);
   function updateDate(date) {
     return format(new Date(date), 'MMMM d, yyyy');
+  }
+
+  function like(liked) {
+    if (liked) {
+      return likeTrue;
+    }
+    return likeFalse;
+  }
+
+  async function unFavorited(favor) {
+    if (favor) {
+      await informs.unfavoriteArticle(slug, user.token);
+      setFavorit(false);
+      setFavoritCount(favoritCount - 1);
+    } else {
+      await informs.favoriteArticle(slug, user.token);
+      setFavorit(true);
+      setFavoritCount(favoritCount + 1);
+    }
   }
 
   return (
@@ -19,7 +41,12 @@ export default function ListItem({ item }) {
             <Link to={`/articles/${slug}`}> {title} </Link>
           </div>
           <div className={'listItem__like'}>
-            <img src={like} alt={'like'} /> {favoritesCount}
+            <img
+              onClick={() => unFavorited(favorit)}
+              src={like(favorit)}
+              alt={'like'}
+            />
+            {favoritCount}
           </div>
         </div>
         <div className={'listItem__profile profile'}>

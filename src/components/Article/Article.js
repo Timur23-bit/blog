@@ -4,7 +4,8 @@ import { format } from 'date-fns';
 import { withRouter } from 'react-router-dom';
 import Spint from '../Spin/Spin';
 import informs from '../../resourse/Service/Service';
-import like from '../../resourse/Vector.svg';
+import likeFalse from '../../resourse/Vector.svg';
+import likeTrue from '../../resourse/path4qwe.svg';
 import vector from '../../resourse/Vector1.svg';
 import './Article.css';
 
@@ -13,6 +14,10 @@ function Article({ slug, user, history }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  const [favorit, setFavorit] = useState(article.favorited);
+  const [favoritCount, setFavoritCount] = useState(article.favoritesCount);
+  // eslint-disable-next-line no-console
+  console.log(article);
   const toolTips = deleted ? (
     <div className={'toolTips'}>
       <div className={'arrow'} />
@@ -32,6 +37,27 @@ function Article({ slug, user, history }) {
       </div>
     </div>
   ) : null;
+
+  function like(liked) {
+    if (liked) {
+      return likeTrue;
+    }
+    return likeFalse;
+  }
+
+  async function unFavorited(favor) {
+    if (favor) {
+      // eslint-disable-next-line no-console
+      console.log(favoritCount);
+      await informs.unfavoriteArticle(slug, user.token);
+      setFavorit(false);
+      setFavoritCount(favoritCount - 1);
+    } else {
+      await informs.favoriteArticle(slug, user.token);
+      setFavorit(true);
+      setFavoritCount(favoritCount + 1);
+    }
+  }
 
   function onDelete() {
     setDeleted(true);
@@ -61,13 +87,15 @@ function Article({ slug, user, history }) {
 
   function getArt() {
     if (!article && !error) {
-      informs.getArticle(slug).then((ext) => {
+      informs.getArticle(slug, user.token).then((ext) => {
         if (ext.message !== undefined) {
           setError(ext);
           setLoading(false);
         } else {
           setArticle(ext.article);
           setLoading(false);
+          setFavoritCount(ext.article.favoritesCount);
+          setFavorit(ext.article.favorited);
         }
       });
     }
@@ -92,7 +120,12 @@ function Article({ slug, user, history }) {
               <div className={'title__left'}>
                 <div className={'title__text'}>{article.title}</div>
                 <div className={'listItem__like'}>
-                  <img src={like} alt={'like'} /> {article.favoritesCount}
+                  <img
+                    onClick={() => unFavorited(favorit)}
+                    src={like(favorit)}
+                    alt={'like'}
+                  />
+                  {favoritCount}
                 </div>
               </div>
               <div className={'listItem__profile profile'}>

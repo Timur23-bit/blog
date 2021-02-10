@@ -3,9 +3,24 @@ import { Alert } from 'antd';
 class GetInformations {
   apiBase = 'https://conduit.productionready.io/api/';
 
-  async getResource(rest) {
-    // eslint-disable-next-line no-underscore-dangle
-    const res = await fetch(`${this.apiBase}${rest}`);
+  async getResource(rest, token) {
+    let res;
+    if (token) {
+      // eslint-disable-next-line no-underscore-dangle
+      res = await fetch(`${this.apiBase}${rest}`, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${token}`,
+        },
+      });
+    } else {
+      res = await fetch(`${this.apiBase}${rest}`, {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+      });
+    }
+
     return res;
   }
 
@@ -59,11 +74,11 @@ class GetInformations {
     }
   };
 
-  async getArticles(pageSize, offset) {
+  async getArticles(pageSize, offset, token) {
     let error = false;
     let body = 0;
     const res = await this.getResource(
-      `articles?limit=${pageSize}&offset=${offset}`
+      `articles?limit=${pageSize}&offset=${offset}`, token
     ).catch((err) => {
       error = { message: this.errorMessage(err.message) };
     });
@@ -100,10 +115,10 @@ class GetInformations {
     return body;
   }
 
-  async getArticle(slug) {
+  async getArticle(slug, token) {
     let error = false;
     let body = 0;
-    const res = await this.getResource(`articles/${slug}`).catch((err) => {
+    const res = await this.getResource(`articles/${slug}`, token).catch((err) => {
       error = { message: this.errorMessage(err.message) };
     });
     if (!error) {
@@ -118,7 +133,8 @@ class GetInformations {
   async getProfile(username) {
     let error = false;
     const res = await this.getResource(`profiles/${username}`);
-    if (res.status !== 200) {
+
+    if (!error && res.status !== 200) {
       error = true;
     }
     return error;
@@ -133,11 +149,15 @@ class GetInformations {
       },
       body: JSON.stringify(data),
     });
+
     const body = res.json();
+
     return body;
   }
 
   async setArticle(data, token) {
+    let body;
+    let error = false;
     const res = await fetch(`${this.apiBase}articles`, {
       method: 'POST',
       headers: {
@@ -145,9 +165,16 @@ class GetInformations {
         Authorization: `Token ${token}`,
       },
       body: JSON.stringify(data),
+    }).catch((err) => {
+      error = { message: this.errorMessage(err.message) };
     });
-    const body = res.json();
-    return body;
+    if (!error) {
+      body = res.json();
+      if (!res.ok) {
+        error = { message: this.errorMessage(res.status) };
+      }
+    }
+    return error || body;
   }
 
   async deleteArticle(slug, token) {
@@ -160,7 +187,29 @@ class GetInformations {
     });
   }
 
+  async unfavoriteArticle(slug, token) {
+    await fetch(`${this.apiBase}articles/${slug}/favorite`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+    });
+  }
+
+  async favoriteArticle(slug, token) {
+    await fetch(`${this.apiBase}articles/${slug}/favorite`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+    });
+  }
+
   async updateArticle(data, token, slug) {
+    let body;
+    let error = false;
     const res = await fetch(`${this.apiBase}articles/${slug}`, {
       method: 'PUT',
       headers: {
@@ -168,9 +217,16 @@ class GetInformations {
         Authorization: `Token ${token}`,
       },
       body: JSON.stringify(data),
+    }).catch((err) => {
+      error = { message: this.errorMessage(err.message) };
     });
-    const body = res.json();
-    return body;
+    if (!error) {
+      body = res.json();
+      if (!res.ok) {
+        error = { message: this.errorMessage(res.status) };
+      }
+    }
+    return error || body;
   }
 }
 

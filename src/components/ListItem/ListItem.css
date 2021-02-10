@@ -31,8 +31,9 @@
     line-height: 22px;
 }
 
-.listItem__like img {
-    margin-right: 4px;
+.listItem__like img{
+    margin-right: 5px;
+    cursor: pointer;
 }
 
 .listItem__title {
