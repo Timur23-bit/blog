@@ -29,7 +29,7 @@ export default function EditProfile ({updateUser, userProfile}) {
 				password: ''
 			}
 		};
-		const valid = await informs.setRegistration(user).then(ext => !ext.errors.email);
+		const valid = await informs.setRegistration(user).then(ext => ext.errors.email);
 		return valid;
 	}
 
