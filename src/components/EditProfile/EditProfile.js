@@ -1,9 +1,10 @@
 import './EditProfile.css';
 import React, { useState } from 'react';
 import {useForm} from "react-hook-form";
+import { withRouter } from 'react-router-dom';
 import informs from "../../resourse/Service/Service";
 
-export default function EditProfile ({updateUser, userProfile}) {
+function EditProfile ({updateUser, userProfile, history}) {
 	const { register, errors, handleSubmit } = useForm();
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -53,7 +54,8 @@ export default function EditProfile ({updateUser, userProfile}) {
 		const res = await informs.setProfile(user, userProfile.token)
 			.then(ext => {
 				updateUser(ext.user);
-				sessionStorage.setItem('user', JSON.stringify(ext.user))
+				sessionStorage.setItem('user', JSON.stringify(ext.user));
+				history.push('/');
 			});
 
 		 return res;
@@ -97,3 +99,5 @@ export default function EditProfile ({updateUser, userProfile}) {
 		</div>
 	);
 }
+
+export default withRouter(EditProfile);
