@@ -1,35 +1,28 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
-import likeFalse from '../../resourse/Vector.svg';
-import likeTrue from '../../resourse/path4qwe.svg';
 import './ListItem.css';
 import informs from '../../resourse/Service/Service';
+import {minify, like, styleHeart, updateDate } from '../../resourse/Service/FunctionForArticle'
+
 
 export default function ListItem({ item, user }) {
-  const { favorited, favoritesCount, tagList, title, description, slug } = item;
-  const [favorit, setFavorit] = useState(favorited);
-  const [favoritCount, setFavoritCount] = useState(favoritesCount);
-  function updateDate(date) {
-    return format(new Date(date), 'MMMM d, yyyy');
-  }
-
-  function like(liked) {
-    if (liked) {
-      return likeTrue;
-    }
-    return likeFalse;
-  }
+  const { tagList, title, description, slug } = item;
+  const [favorit, setFavorit] = useState(item.favorited);
+  const [favoritCount, setFavoritCount] = useState(item.favoritesCount);
 
   async function unFavorited(favor) {
-    if (favor) {
-      await informs.unfavoriteArticle(slug, user.token);
-      setFavorit(false);
-      setFavoritCount(favoritCount - 1);
-    } else {
-      await informs.favoriteArticle(slug, user.token);
-      setFavorit(true);
-      setFavoritCount(favoritCount + 1);
+    if (user) {
+      if (favor) {
+        await informs.unfavoriteArticle(slug, user.token).then(result => {
+          setFavorit(result.article.favorited);
+          setFavoritCount(result.article.favoritesCount);
+        });
+      } else {
+        await informs.favoriteArticle(slug, user.token).then(result => {
+          setFavorit(result.article.favorited);
+          setFavoritCount(result.article.favoritesCount);
+        });
+      }
     }
   }
 
@@ -38,10 +31,11 @@ export default function ListItem({ item, user }) {
       <div className={'listItem__title'}>
         <div className={'title__left'}>
           <div className={'title__text'}>
-            <Link to={`/articles/${slug}`}> {title} </Link>
+            <Link to={`/articles/${slug}`}> {minify(title)} </Link>
           </div>
           <div className={'listItem__like'}>
             <img
+              style={styleHeart(user)}
               onClick={() => unFavorited(favorit)}
               src={like(favorit)}
               alt={'like'}

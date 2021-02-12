@@ -26,7 +26,7 @@ function SignIn({ updateUser, history }) {
     };
     const valid = await informs
       .setRegistration(user)
-      .then((ext) => !ext.errors.email);
+      .then((ext) => ext.errors.email);
     return valid;
   }
 

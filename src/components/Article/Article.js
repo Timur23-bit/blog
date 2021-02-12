@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { format } from 'date-fns';
 import { withRouter } from 'react-router-dom';
 import Spint from '../Spin/Spin';
 import informs from '../../resourse/Service/Service';
-import likeFalse from '../../resourse/Vector.svg';
-import likeTrue from '../../resourse/path4qwe.svg';
 import vector from '../../resourse/Vector1.svg';
 import './Article.css';
+import {postDeleted, like, styleHeart, onEdit, updateDate } from '../../resourse/Service/FunctionForArticle';
 
 function Article({ slug, user, history }) {
   const [article, setArticle] = useState(0);
@@ -16,8 +14,11 @@ function Article({ slug, user, history }) {
   const [deleted, setDeleted] = useState(false);
   const [favorit, setFavorit] = useState(article.favorited);
   const [favoritCount, setFavoritCount] = useState(article.favoritesCount);
-  // eslint-disable-next-line no-console
-  console.log(article);
+
+  let token= '';
+  if (user) {
+    token = user.token
+  }
   const toolTips = deleted ? (
     <div className={'toolTips'}>
       <div className={'arrow'} />
@@ -31,54 +32,35 @@ function Article({ slug, user, history }) {
         <button className={'btn__no'} onClick={() => setDeleted(false)}>
           No
         </button>
-        <button className={'btn__yes'} onClick={postDeleted}>
+        <button className={'btn__yes'} onClick={() => postDeleted(slug, token, history)}>
           Yes
         </button>
       </div>
     </div>
   ) : null;
 
-  function like(liked) {
-    if (liked) {
-      return likeTrue;
-    }
-    return likeFalse;
-  }
-
   async function unFavorited(favor) {
-    if (favor) {
-      // eslint-disable-next-line no-console
-      console.log(favoritCount);
-      await informs.unfavoriteArticle(slug, user.token);
+    if (user) {
+      if (favor) {
+      await informs.unfavoriteArticle(slug, token);
       setFavorit(false);
       setFavoritCount(favoritCount - 1);
-    } else {
-      await informs.favoriteArticle(slug, user.token);
+      } else {
+      await informs.favoriteArticle(slug, token);
       setFavorit(true);
       setFavoritCount(favoritCount + 1);
+      }
     }
   }
 
-  function onDelete() {
-    setDeleted(true);
-  }
-
-  async function postDeleted() {
-    await informs.deleteArticle(slug, user.token);
-    history.push('/');
-  }
-
-  function onEdit() {
-    history.push(`/articles/${slug}/edit`);
-  }
 
   const editOrDelete =
-    article && user.username === article.author.username ? (
+    user && article && user.username === article.author.username ? (
       <div className={'profile__articleBtn articleBtn'}>
-        <button className={'articleBtn articleBtn__delete'} onClick={onDelete}>
+        <button className={'articleBtn articleBtn__delete'} onClick={() => setDeleted(true)}>
           Delete
         </button>
-        <button className={'articleBtn articleBtn__edit'} onClick={onEdit}>
+        <button className={'articleBtn articleBtn__edit'} onClick={() => onEdit(history, slug)}>
           Edit
         </button>
         {toolTips}
@@ -87,7 +69,7 @@ function Article({ slug, user, history }) {
 
   function getArt() {
     if (!article && !error) {
-      informs.getArticle(slug, user.token).then((ext) => {
+       informs.getArticle(slug, token).then((ext) => {
         if (ext.message !== undefined) {
           setError(ext);
           setLoading(false);
@@ -101,9 +83,8 @@ function Article({ slug, user, history }) {
     }
   }
   getArt();
-  function releaseDate(date) {
-    return format(new Date(date), 'MMMM d, yyyy');
-  }
+
+
 
   function render() {
     if (error) {
@@ -118,9 +99,10 @@ function Article({ slug, user, history }) {
           <div className={'listItem article__listItem'}>
             <div className={'listItem__title'}>
               <div className={'title__left'}>
-                <div className={'title__text'}>{article.title}</div>
+                <div className={'article__titleText title__text'}>{article.title}</div>
                 <div className={'listItem__like'}>
                   <img
+                    style={styleHeart(user)}
                     onClick={() => unFavorited(favorit)}
                     src={like(favorit)}
                     alt={'like'}
@@ -134,7 +116,7 @@ function Article({ slug, user, history }) {
                     {article.author.username}
                   </div>
                   <div className={'profile__date'}>
-                    {releaseDate(article.updatedAt)}
+                    {updateDate(article.updatedAt)}
                   </div>
                 </div>
                 <img

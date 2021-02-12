@@ -10,9 +10,14 @@ export default function List({user}) {
 	const [ listArticles, setListArticles ] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
+
+	let token='';
+	if (user) {
+		token = user.token;
+	}
 	let render;
 	const getCurrentArticleList = (currentPage, pageSize) => {
-		informs.getArticles(pageSize, (currentPage-1)*pageSize, user.token).then(ext => {
+		informs.getArticles(pageSize, (currentPage-1)*pageSize, token).then(ext => {
 			if (ext.message !== undefined) {
 				setError(ext.message);
 				setLoading(false);
@@ -23,8 +28,9 @@ export default function List({user}) {
 		})
 	};
 
+
 	useEffect(()=>{
-		informs.getArticles(5, 0, user.token).then(ext => {
+		informs.getArticles(5, 0, token).then(ext => {
 			if (ext.message !== undefined) {
 				setError(ext);
 				setLoading(false);
@@ -35,9 +41,9 @@ export default function List({user}) {
 		});
 	}, []);
 
-	if (!error) {
+	if (!error ) {
 		render = listArticles.length === 0 && loading ? <Spint/> : <div className="list">
-			{listArticles.map((item, i) => <ListItem item={item} user={user} key={i}/>)}
+			{listArticles.map((item, i) => <ListItem item={item} user={user} key={item.slug}/>)}
 			<div className={'pagination'}>
 				<Pagination defaultCurrent={1} total={500} pageSize={5} onChange={(currentPage, pageSize) => {
 					getCurrentArticleList(currentPage, pageSize);
@@ -46,6 +52,6 @@ export default function List({user}) {
 		</div>;
 	}
 
-	const err = error ? <div>{error.message}</div> : render;
+	const err = error ?  <div>{error.message}</div> : render;
 	return err;
 }

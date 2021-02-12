@@ -6,12 +6,17 @@ import informs from '../../resourse/Service/Service';
 import Spint from '../Spin/Spin';
 
 function EditArticle({ user, slug, history }) {
+  let token='';
   const { register, errors, handleSubmit } = useForm();
   const [tagList, setTagList] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [body, setBody] = useState('');
   const [loading, setLoading] = useState(true);
+
+  if (user) {
+    token = user.token;
+  }
 
   function getArt() {
     if (!title && !description && !body) {
@@ -92,7 +97,7 @@ function EditArticle({ user, slug, history }) {
         tagList: tagList.length !== 0 ? tagList : [],
       },
     };
-    await informs.updateArticle(article, user.token, slug);
+    await informs.updateArticle(article, token, slug);
     history.push('/');
   };
 

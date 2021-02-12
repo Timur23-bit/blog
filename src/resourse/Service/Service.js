@@ -188,23 +188,27 @@ class GetInformations {
   }
 
   async unfavoriteArticle(slug, token) {
-    await fetch(`${this.apiBase}articles/${slug}/favorite`, {
+    const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${token}`,
       },
     });
+    const body = res.json();
+    return body;
   }
 
   async favoriteArticle(slug, token) {
-    await fetch(`${this.apiBase}articles/${slug}/favorite`, {
+    const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${token}`,
       },
     });
+    const body = res.json();
+    return body;
   }
 
   async updateArticle(data, token, slug) {

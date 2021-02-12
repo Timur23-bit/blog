@@ -1,7 +1,6 @@
 import './EditProfile.css';
 import React, { useState } from 'react';
 import {useForm} from "react-hook-form";
-import {Link} from "react-router-dom";
 import informs from "../../resourse/Service/Service";
 
 export default function EditProfile ({updateUser, userProfile}) {
@@ -94,7 +93,6 @@ export default function EditProfile ({updateUser, userProfile}) {
 						<input className={'btn__submit'} type="submit" value={'Save'} />
 					</label>
 				</form>
-				<div className="alreadySignIn">Already have an account? <Link to={'/sign-in'}>Sign In</Link>.</div>
 			</div>
 		</div>
 	);
