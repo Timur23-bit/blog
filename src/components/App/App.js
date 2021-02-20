@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../Header/Header';
-import List from '../List/List';
+import ListArticles from '../ListArticles/ListArticles';
 import Article from '../Article/Article';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
@@ -20,8 +20,8 @@ export default function App() {
     <div>
       <Router>
         <Header user={user} updateUser={updateUser} />
-        <Route path="/articles" exact render={() => <List user={user} />} />
-        <Route path="/" render={() => <List user={user} />} exact />
+        <Route path="/articles" exact render={() => <ListArticles user={user} />} />
+        <Route path="/" render={() => <ListArticles user={user} />} exact />
         <Route
           path="/articles/:slug"
           exact
@@ -32,13 +32,13 @@ export default function App() {
         <Route
           path="/articles/:slug/edit"
           render={({ match }) => (
-            <EditArticle user={user} slug={match.params.slug} />
+            <EditArticle user={user} slug={match.params.slug} edit={true} />
           )}
         />
         <Route
           path="/new-article"
           exact
-          render={() => <CreateArticle updateUser={updateUser} user={user} />}
+          render={({ match }) => <EditArticle user={user} slug={match.params.slug} />}
         />
         <Route
           path="/profile"

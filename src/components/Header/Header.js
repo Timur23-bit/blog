@@ -3,20 +3,11 @@ import { Link, withRouter } from 'react-router-dom';
 import './Header.css';
 
 function Header({ updateUser, user, history }) {
-  let username;
-  let img;
-  let profile;
-
-  if (user) {
-    username = user.username;
-    img = user.image;
-  }
-
-  function imgCorrection(image) {
+    function imgCorrection(image) {
     if (image) {
       return (
         <Link to={'/profile'}>
-          <img className={'avatar'} src={img} alt={'Avatar'} />
+          <img className={'avatar'} src={user && user.image} alt={'Avatar'} />
         </Link>
       );
     }
@@ -27,16 +18,16 @@ function Header({ updateUser, user, history }) {
     );
   }
 
-  if (username) {
-    profile = (
+
+   const profile = user ? (
       <div className={'header__profile'}>
         <button className={'btn__createArticle'}>
           <Link to={'/new-article'}>Create article</Link>
         </button>
         <div className={'header__username'}>
-          <Link to={'/profile'}>{username}</Link>
+          <Link to={'/profile'}>{user && user.username}</Link>
         </div>
-        <div>{imgCorrection(img)}</div>
+        <div>{imgCorrection(user && user.image)}</div>
         <button
           onClick={() => {
             sessionStorage.clear();
@@ -48,8 +39,8 @@ function Header({ updateUser, user, history }) {
           Log out
         </button>
       </div>
-    );
-  }
+    ) : '';
+
   const headerAuthor = (
     <div>
       <button className={'btn header__signIn'}>
@@ -61,7 +52,7 @@ function Header({ updateUser, user, history }) {
     </div>
   );
 
-  const render = sessionStorage.getItem('user') ? profile : headerAuthor;
+  const render = user ? profile : headerAuthor;
 
   return (
     <div className={'header'}>

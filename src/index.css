@@ -10,9 +10,9 @@ body {
 @font-face {
   font-family: 'Inter';
   src: local('Inter Regular'), local('Inter-Regular'),
-  url('./resourse/Inter-Regular.woff2') format('woff2'),
-  url('./resourse/Inter-Regular.woff') format('woff'),
-  url('./resourse/Inter-Regular.ttf') format('truetype');
+  url('resourse/font/Inter-Regular.woff2') format('woff2'),
+  url('resourse/font/Inter-Regular.woff') format('woff'),
+  url('resourse/font/Inter-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }

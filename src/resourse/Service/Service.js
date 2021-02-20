@@ -3,6 +3,12 @@ import { Alert } from 'antd';
 class GetInformations {
   apiBase = 'https://conduit.productionready.io/api/';
 
+  statusResponse = {
+    'forbidden': 403,
+    'unauthorized': 401,
+    'not_found': 404
+  };
+
   async getResource(rest, token) {
     let res;
     if (token) {
@@ -26,7 +32,7 @@ class GetInformations {
 
   errorMessage = (status) => {
     switch (status) {
-      case 401:
+      case this.statusResponse.unauthorized:
         return (
           <Alert
             message="Error"
@@ -35,7 +41,7 @@ class GetInformations {
             showIcon
           />
         );
-      case 403:
+      case this.statusResponse.forbidden:
         return (
           <Alert
             message="Error"
@@ -44,7 +50,7 @@ class GetInformations {
             showIcon
           />
         );
-      case 404:
+      case this.statusResponse.not_found:
         return (
           <Alert
             message="Error"

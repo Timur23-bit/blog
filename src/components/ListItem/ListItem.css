@@ -53,21 +53,23 @@
 
 .title__left {
     margin: 0;
-    padding: 0;
+    padding: 0 200px 0 0;
     display: flex;
+
 }
 
 .title__text {
     font-size: 20px;
     line-height: 28px;
     margin-right: 14px;
+
     color: #1890FF;
 }
 
 .listItem__description {
     font-size: 12px;
     line-height: 22px;
-    width: 70%;
+    padding-right: 200px;
 }
 
 .profile {

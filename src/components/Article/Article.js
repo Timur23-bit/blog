@@ -15,10 +15,6 @@ function Article({ slug, user, history }) {
   const [favorit, setFavorit] = useState(article.favorited);
   const [favoritCount, setFavoritCount] = useState(article.favoritesCount);
 
-  let token= '';
-  if (user) {
-    token = user.token
-  }
   const toolTips = deleted ? (
     <div className={'toolTips'}>
       <div className={'arrow'} />
@@ -32,7 +28,7 @@ function Article({ slug, user, history }) {
         <button className={'btn__no'} onClick={() => setDeleted(false)}>
           No
         </button>
-        <button className={'btn__yes'} onClick={() => postDeleted(slug, token, history)}>
+        <button className={'btn__yes'} onClick={() => postDeleted(slug, user && user.token, history)}>
           Yes
         </button>
       </div>
@@ -42,11 +38,11 @@ function Article({ slug, user, history }) {
   async function unFavorited(favor) {
     if (user) {
       if (favor) {
-      await informs.unfavoriteArticle(slug, token);
+      await informs.unfavoriteArticle(slug, user && user.token);
       setFavorit(false);
       setFavoritCount(favoritCount - 1);
       } else {
-      await informs.favoriteArticle(slug, token);
+      await informs.favoriteArticle(slug, user && user.token);
       setFavorit(true);
       setFavoritCount(favoritCount + 1);
       }
@@ -65,11 +61,11 @@ function Article({ slug, user, history }) {
         </button>
         {toolTips}
       </div>
-    ) : null;
+    ) : '';
 
   function getArt() {
     if (!article && !error) {
-       informs.getArticle(slug, token).then((ext) => {
+       informs.getArticle(slug, user && user.token).then((ext) => {
         if (ext.message !== undefined) {
           setError(ext);
           setLoading(false);

@@ -9,19 +9,13 @@
     margin-bottom: 25px;
 }
 
-.article__body pre {
-    width: 100%;
-    white-space: pre-wrap;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 20px;
-    line-height: 28px;
-}
-
 .article__listItem {
     height: auto!important;
     background-color: white;
+}
+
+.article__body {
+    padding-right: 200px;
 }
 
 .listItem__title {
@@ -116,10 +110,6 @@
     margin-top: 4px;
     margin-right: 9px;
     z-index: 999;
-}
-
-.article__titleText {
-    width: 50%!important;
 }
 
 .btn__no {

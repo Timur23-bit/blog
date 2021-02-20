@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ListItem.css';
 import informs from '../../resourse/Service/Service';
-import {minify, like, styleHeart, updateDate } from '../../resourse/Service/FunctionForArticle'
+import { like, styleHeart, updateDate } from '../../resourse/Service/FunctionForArticle'
 
 
 export default function ListItem({ item, user }) {
@@ -31,7 +31,7 @@ export default function ListItem({ item, user }) {
       <div className={'listItem__title'}>
         <div className={'title__left'}>
           <div className={'title__text'}>
-            <Link to={`/articles/${slug}`}> {minify(title)} </Link>
+            <Link to={`/articles/${slug}`}> {title} </Link>
           </div>
           <div className={'listItem__like'}>
             <img

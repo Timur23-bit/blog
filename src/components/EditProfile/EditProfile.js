@@ -41,7 +41,6 @@ function EditProfile ({updateUser, userProfile, history}) {
 		return 'input';
 	}
 
-
 	const onSubmit = async data => {
 		const user = {
 			user: {
@@ -64,7 +63,7 @@ function EditProfile ({updateUser, userProfile, history}) {
 		<div className={'wrapper'}>
 			<div className={'signUp'}>
 				<form onSubmit={handleSubmit(onSubmit)} >
-					<div className={'signUp__title'}>Create new account</div>
+					<div className={'signUp__title'}>Edit Profile</div>
 					<label >
 						<p>Username</p>
 						<input className={errorInput(errors.username)} name="username" onChange={event => setUsername(event.target.value)} value={username} ref={register({required: true, minLength: 3, maxLength: 20, validate: user => validateUsername(user)})} type="text" placeholder={'Username'}/>
@@ -84,7 +83,6 @@ function EditProfile ({updateUser, userProfile, history}) {
 						<input className={errorInput(errors.password)} name="password" id="pass" ref={register({required: true, minLength: 8, maxLength: 40})} placeholder={'Password'} type="password"/>
 						{errors.password && errors.password.type === 'minLength' && <div className={'error'}>Your password needs to be at least 8 characters.</div>}
 						{errors.password && errors.password.type === 'maxLength' && <div className={'error'}>Your password must be no more than 40 characters</div>}
-						{errors.password && errors.password.type === 'required' && <div className={'error'}>Password is required</div>}
 					</label>
 					<label>
 						<p>Avatar image(url)</p>

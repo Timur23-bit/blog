@@ -1,24 +1,26 @@
 import './EditArticle.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { withRouter } from 'react-router-dom';
 import informs from '../../resourse/Service/Service';
 import Spint from '../Spin/Spin';
 
-function EditArticle({ user, slug, history }) {
-  let token='';
+function EditArticle({ user, slug, history, edit }) {
   const { register, errors, handleSubmit } = useForm();
   const [tagList, setTagList] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [body, setBody] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  if (user) {
-    token = user.token;
-  }
+  useEffect(() => {
+    if (edit) {
+      getArt()
+    }
+  }, []);
 
   function getArt() {
+    setLoading(true);
     if (!title && !description && !body) {
       informs.getArticle(slug).then((ext) => {
         setTitle(ext.article.title);
@@ -29,17 +31,23 @@ function EditArticle({ user, slug, history }) {
       });
     }
   }
-  getArt();
+
+  function editTitle(item) {
+    return item ? 'Edit article' : 'Create new article';
+  }
+
   function TagList({ tag }) {
     return (
       <div className={'tag'}>
         <button
           className="btn__tag tags"
-          value={`${tag}`}
-          onClick={(event) => event.preventDefault()}
+					onClick={(event) => {
+						event.preventDefault();
+						onDeleted(event);
+					}}
         >
-          {tag}
-        </button>
+					{tag}
+				</button>
         <button
           className="btn__delete"
           onClick={(event) => {
@@ -66,7 +74,8 @@ function EditArticle({ user, slug, history }) {
       event.target.parentElement.firstChild.value &&
       !tagList.includes(event.target.parentElement.firstChild.value)
     ) {
-      setTagList([...tagList, event.target.parentElement.firstChild.value]);
+      const {value} = event.target.parentElement.firstChild;
+      setTagList([...tagList, value]);
       // eslint-disable-next-line no-param-reassign
       event.target.parentElement.firstChild.value = '';
     }
@@ -83,23 +92,37 @@ function EditArticle({ user, slug, history }) {
 
   function errorInput(error) {
     if (error) {
-      return 'createNewArticle__input input inputError';
+      return 'editArticle__input input inputError';
     }
-    return 'createNewArticle__input input';
+    return 'editArticle__input input';
   }
 
-  const onSubmit = async (data) => {
+  const onSubmitEdit = async (data) => {
     const article = {
       article: {
         title: data.title,
         description: data.description,
         body: data.body,
-        tagList: tagList.length !== 0 ? tagList : [],
+        tagList: tagList.length ? tagList : [],
       },
     };
-    await informs.updateArticle(article, token, slug);
+    await informs.updateArticle(article, user && user.token, slug);
     history.push('/');
   };
+
+  const onSubmitCreate = async (data) => {
+    const article = {
+      article: {
+        title: data.title,
+        description: data.description,
+        body: data.body,
+        tagList: tagList.length ? tagList : '',
+      },
+    };
+    await informs.setArticle(article, user && user.token);
+    history.push('/');
+  };
+
 
   function onEditInput(event) {
     switch (event.target.name) {
@@ -114,12 +137,14 @@ function EditArticle({ user, slug, history }) {
     }
   }
 
+  const onSubmit = edit ? onSubmitEdit : onSubmitCreate;
+
   function render() {
     return (
       <div className={'wrapper'}>
-        <div className={'createNewArticle'}>
+        <div className={'editArticle'}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={'createNewArticle__title'}>Edit article</div>
+            <div className={'editArticle__title'}>{editTitle(edit)}</div>
             <label>
               <p>Title</p>
               <input
