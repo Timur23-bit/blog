@@ -7,8 +7,6 @@ import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import EditProfile from '../EditProfile/EditProfile';
 import EditArticle from '../EditArticle/EditArticle';
-// eslint-disable-next-line no-unused-vars
-import CreateArticle from '../CreatArticle/CreateArticle';
 
 export default function App() {
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user')));
