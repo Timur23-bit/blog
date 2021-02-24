@@ -8,7 +8,6 @@ import informs from "../../resourse/Service/Service";
 function SignUp ({updateUser, history}) {
 	const { register, errors, handleSubmit } = useForm();
 	const [checked, setChecked] = useState(true);
-	// eslint-disable-next-line no-useless-escape
 	const validEmail = /^[\w][\w-\.]*@[\w-]+\.[a-z]{2,4}$/i;
 
 	function onChecked(event) {

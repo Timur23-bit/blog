@@ -1,5 +1,5 @@
-import './EditProfile.css';
 import React, { useState } from 'react';
+import './EditProfile.css';
 import {useForm} from "react-hook-form";
 import { withRouter } from 'react-router-dom';
 import informs from "../../resourse/Service/Service";
