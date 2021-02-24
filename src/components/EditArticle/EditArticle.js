@@ -43,7 +43,6 @@ function EditArticle({ user, slug, history, edit }) {
           className="btn__tag tags"
 					onClick={(event) => {
 						event.preventDefault();
-						onDeleted(event);
 					}}
         >
 					{tag}
